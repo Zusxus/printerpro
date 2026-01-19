@@ -11,26 +11,21 @@ interface SidebarProps {
   onPrint: () => void;
   onOpenCalibration: () => void;
   onOpenSettings: () => void;
-  // ❌ حذفنا isDarkMode و onToggleTheme من هنا
 }
 
 // دالة خاصة لزر الـ PDF
 const handleSavePdf = () => {
-  // 1. خزن الاسم الاصلي للصفحة حتى ترجعه بعدين
   const originalTitle = document.title;
-  
-  // 2. غير اسم الصفحة لاسم مرتب (مثلاً التاريخ والوقت)
   const date = new Date().toISOString().slice(0, 10);
-  document.title = `تصميمي_${date}`; // هذا راح يصير اسم ملف الـ PDF
+  document.title = `تصميمي_${date}`;
 
-  // 3. افتح نافذة الطباعة
   window.print();
 
-  // 4. رجع الاسم الاصلي (بعد وقت قصير جداً)
   setTimeout(() => {
     document.title = originalTitle;
   }, 100);
 };
+
 const Sidebar: React.FC<SidebarProps> = ({ 
   documents, onAdd, onRemove, onUpdateImage, onImageUpload, onPrint, onOpenCalibration, onOpenSettings 
 }) => {
@@ -38,16 +33,16 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div className="h-full flex flex-col p-4 md:p-6 text-right transition-colors duration-300 print:hidden" dir="rtl">
       
       {/* الرأس - Header */}
-      <div className="mb-6 md:mb-8 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-800 z-10 pb-2 transition-colors">
+      <div className="mb-6 md:mb-8 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10 pb-2 transition-colors">
         <div>
           <h1 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white tracking-tighter">برينت برو</h1>
           <p className="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400">نظام طباعة المستمسكات</p>
         </div>
         
-        {/* زر الإعدادات فقط (بدون زر الشمس/القمر) */}
+        {/* زر الإعدادات */}
         <button 
           onClick={onOpenSettings} 
-          className="p-2 md:p-2.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-600 transition-all active:scale-95"
+          className="p-2 md:p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95"
         >
           <svg className="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -56,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </button>
       </div>
 
-      <div className="space-y-6 flex-1 overflow-y-auto pb-20 md:pb-0">
+      <div className="space-y-6 flex-1 overflow-y-auto pb-20 md:pb-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full">
         
         {/* قسم إضافة مستمسك جديد */}
         <div>
@@ -66,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <button 
                 key={type} 
                 onClick={() => onAdd(type as DocType)} 
-                className="p-3 md:p-3.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-700 rounded-xl text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-800 transition-all active:bg-blue-100 flex flex-col items-center gap-1"
+                className="p-3 md:p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-[11px] md:text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-700 hover:border-blue-200 dark:hover:border-slate-600 transition-all active:bg-blue-100 flex flex-col items-center gap-1"
               >
                 <span className="text-blue-500 text-sm">+</span>
                 {config.label}
@@ -79,12 +74,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="space-y-4">
           <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">المستندات الحالية ({documents.length})</h2>
           {documents.length === 0 && (
-            <div className="text-center py-8 border-2 border-dashed border-slate-100 dark:border-slate-700 rounded-2xl">
+            <div className="text-center py-8 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-2xl">
               <p className="text-[10px] text-slate-400 font-medium">لم يتم إضافة أي مستمسك بعد</p>
             </div>
           )}
           {documents.map((doc) => (
-            <div key={doc.id} className="p-3 md:p-4 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm relative group transition-colors">
+            <div key={doc.id} className="p-3 md:p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm relative group transition-colors">
               <button 
                 onClick={() => onRemove(doc.id)} 
                 className="absolute -top-2 -left-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
@@ -94,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               
               <div className="flex justify-between items-center mb-3">
                  <p className="text-[11px] font-black text-slate-800 dark:text-white">{DOCUMENT_CONFIGS[doc.type].label}</p>
-                 <span className="text-[8px] bg-slate-100 dark:bg-slate-600 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-300 font-bold uppercase">{doc.type}</span>
+                 <span className="text-[8px] bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-300 font-bold uppercase">{doc.type}</span>
               </div>
               
               <div className="grid grid-cols-1 gap-3">
@@ -104,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                        <span className="text-[9px] text-slate-400 font-bold tracking-tighter uppercase">{slot}</span>
                     </div>
                     {doc.images[slot] ? (
-                      <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-600">
+                      <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-100 dark:border-slate-700">
                         <div className="flex items-center gap-2">
                           <img src={doc.images[slot]!} className="w-10 h-6 object-cover rounded shadow-sm" alt="" />
                           <span className="text-[9px] text-green-600 dark:text-green-400 font-bold">تم الرفع</span>
@@ -118,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       </div>
                     ) : (
                       <div className="relative">
-                        <label className="flex items-center justify-center w-full p-2 border border-dashed border-blue-200 dark:border-slate-600 rounded-xl bg-blue-50/30 dark:bg-slate-800/50 cursor-pointer active:bg-blue-100 dark:active:bg-slate-700 transition-colors">
+                        <label className="flex items-center justify-center w-full p-2 border border-dashed border-blue-200 dark:border-slate-600 rounded-xl bg-blue-50/30 dark:bg-slate-900/50 cursor-pointer active:bg-blue-100 dark:active:bg-slate-800 transition-colors">
                           <span className="text-[9px] text-blue-600 dark:text-blue-400 font-bold">اختيار صورة...</span>
                           <input 
                             type="file" multiple accept="image/*"
@@ -138,25 +133,20 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* الأزرار الثابتة في الأسفل */}
       <div className="
-  /* --- 📱 إعدادات الموبايل (طافي) --- */
         fixed bottom-0 left-0 right-0 z-50
         w-full p-4
-      bg-white/90 dark:bg-slate-900/90
+        bg-white/90 dark:bg-slate-900/90
         backdrop-blur-lg
-        border-t border-slate-200 dark:border-slate-700
+        border-t border-slate-200 dark:border-slate-800
         shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]
 
-         /* --- 💻 إعدادات الحاسبة (طبيعي) --- */
-        md:static /* إلغاء التثبيت */
+        md:static
         md:w-full md:p-0
-        md:bg-transparent md:dark:bg-transparent /* خلفية شفافة */
+        md:bg-transparent md:dark:bg-transparent
         md:border-none md:shadow-none
         md:mt-auto md:pt-4
-        ">
-  
-  {/* 👇👇👇 محتوى الأزرار (نفسه ما غيرناه) 👇👇👇 */}
+      ">
           <div className="flex gap-3 w-full max-w-md mx-auto md:max-w-none">
-            {/* زر الطباعة */}
             <button 
             onClick={onPrint} 
             disabled={documents.length === 0} 
@@ -165,7 +155,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
             <span>طباعة</span>
             </button>
-            {/* زر حفظ PDF */}
             <button 
             onClick={handleSavePdf} 
             disabled={documents.length === 0} 
