@@ -24,7 +24,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
     [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full">
       
       {/* الهيدر */}
-      <header className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-8 py-6 flex items-center justify-between z-10 transition-colors">
+      <header className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-4 flex items-center justify-between z-10 transition-colors">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}
@@ -35,14 +35,14 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
             </svg>
           </button>
           <div>
-            <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">إعدادات النظام</h1>
-            <p className="text-xs text-slate-400">تخصيص تجربة الطباعة والترتيب الآلي</p>
+            <h1 className="text-sm md:text-xl font-black text-slate-800 dark:text-white tracking-tighter">إعدادات النظام</h1>
+            <p className="text-sm md:text-l text-slate-400">تخصيص تجربة الطباعة والترتيب الآلي</p>
           </div>
         </div>
         
         <button 
           onClick={onBack}
-          className="px-8 py-3 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-100 dark:shadow-none hover:bg-blue-700 transition-all"
+          className="px-8 py-3 bg-blue-600 text-white rounded-2xl text-sm md:text-xl font-bold shadow-lg shadow-blue-100 dark:shadow-none hover:bg-blue-700 transition-all"
         >
           حفظ والرجوع
         </button>
@@ -62,8 +62,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm mb-4 flex items-center justify-center text-blue-600 border border-slate-100 dark:border-slate-700">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h8M8 12h8m-8 5h8" /></svg>
                 </div>
-                <h4 className="font-bold text-slate-800 dark:text-white">الربط العمودي</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر فوق بعضهما (الوضع التقليدي).</p>
+                <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">الربط العمودي</h4>
+                <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر فوق بعضهما (الوضع التقليدي).</p>
               </div>
 
               <div 
@@ -73,8 +73,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm mb-4 flex items-center justify-center text-blue-600 border border-slate-100 dark:border-slate-700">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m6 10V7" /></svg>
                 </div>
-                <h4 className="font-bold text-slate-800 dark:text-white">الربط الأفقي</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر جنباً إلى جنب (مثالي للبطاقات الوطنية).</p>
+                <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">الربط الأفقي</h4>
+                <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر جنباً إلى جنب (مثالي للبطاقات الوطنية).</p>
               </div>
             </div>
           </section>
@@ -86,8 +86,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
               <div className="divide-y divide-slate-200/50 dark:divide-slate-800">
                 <div className="py-5 px-4 flex items-center justify-between">
                   <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm">علامات القص (Cut Marks)</span>
-                    <span className="text-[10px] text-slate-400">إضافة خطوط رفيعة حول كل خانة لتسهيل عملية التقطيع بالمقص.</span>
+                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text=xl">علامات القص (Cut Marks)</span>
+                    <span className="text-sm md:text-l text-slate-400">إضافة خطوط رفيعة حول كل خانة لتسهيل عملية التقطيع بالمقص.</span>
                   </div>
                   <div 
                     onClick={() => onUpdate({...settings, showCutMarks: !settings.showCutMarks})}
@@ -99,8 +99,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
 
                 <div className="py-5 px-4 flex items-center justify-between">
                   <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm">تسمية الخانات الفارغة</span>
-                    <span className="text-[10px] text-slate-400">إظهار نوع المستمسك واسم السلوت (وجه/ظهر) إذا لم يتم رفع صورة.</span>
+                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text-xl">تسمية الخانات الفارغة</span>
+                    <span className="text-sm text-slate-400">إظهار نوع المستمسك واسم السلوت (وجه/ظهر) إذا لم يتم رفع صورة.</span>
                   </div>
                   <div 
                     onClick={() => onUpdate({...settings, showLabels: !settings.showLabels})}
@@ -126,8 +126,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-800 dark:text-white text-lg">معايرة المسطرة</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">اضبط هذا الخيار إذا كانت القياسات المطبوعة أكبر أو أصغر من الواقع.</p>
+                    <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">معايرة المسطرة</h4>
+                    <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">اضبط هذا الخيار إذا كانت القياسات المطبوعة أكبر أو أصغر من الواقع.</p>
                   </div>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-   flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all">
@@ -144,8 +144,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
               <div className="divide-y divide-slate-200/50 dark:divide-slate-800">
                 <div className="py-5 px-4 flex items-center justify-between">
                   <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm">الوضع الليلي (Dark Mode)</span>
-                    <span className="text-[10px] text-slate-400">تحويل واجهة النظام إلى اللون الداكن لراحة العين.</span>
+                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text-xl">الوضع الليلي (Dark Mode)</span>
+                    <span className="text-sm md:text-l text-slate-400">تحويل واجهة النظام إلى اللون الداكن لراحة العين.</span>
                   </div>
                   
                   <div 
