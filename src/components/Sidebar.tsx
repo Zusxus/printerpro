@@ -14,6 +14,23 @@ interface SidebarProps {
   // ❌ حذفنا isDarkMode و onToggleTheme من هنا
 }
 
+// دالة خاصة لزر الـ PDF
+const handleSavePdf = () => {
+  // 1. خزن الاسم الاصلي للصفحة حتى ترجعه بعدين
+  const originalTitle = document.title;
+  
+  // 2. غير اسم الصفحة لاسم مرتب (مثلاً التاريخ والوقت)
+  const date = new Date().toISOString().slice(0, 10);
+  document.title = `تصميمي_${date}`; // هذا راح يصير اسم ملف الـ PDF
+
+  // 3. افتح نافذة الطباعة
+  window.print();
+
+  // 4. رجع الاسم الاصلي (بعد وقت قصير جداً)
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 100);
+};
 const Sidebar: React.FC<SidebarProps> = ({ 
   documents, onAdd, onRemove, onUpdateImage, onImageUpload, onPrint, onOpenCalibration, onOpenSettings 
 }) => {
@@ -120,17 +137,46 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* الأزرار الثابتة في الأسفل */}
-      <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 space-y-2 sticky bottom-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md pb-2 md:pb-0 transition-colors">
-        
-        <button 
-          onClick={onPrint} 
-          disabled={documents.length === 0} 
-          className="w-full py-3.5 md:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs md:text-sm font-black shadow-xl shadow-blue-100 dark:shadow-none active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-          بدء الطباعة الآن
-        </button>
-      </div>
+      <div className="
+  /* --- 📱 إعدادات الموبايل (طافي) --- */
+        fixed bottom-0 left-0 right-0 z-50
+        w-full p-4
+      bg-white/90 dark:bg-slate-900/90
+        backdrop-blur-lg
+        border-t border-slate-200 dark:border-slate-700
+        shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]
+
+         /* --- 💻 إعدادات الحاسبة (طبيعي) --- */
+        md:static /* إلغاء التثبيت */
+        md:w-full md:p-0
+        md:bg-transparent md:dark:bg-transparent /* خلفية شفافة */
+        md:border-none md:shadow-none
+        md:mt-auto md:pt-4
+        ">
+  
+  {/* 👇👇👇 محتوى الأزرار (نفسه ما غيرناه) 👇👇👇 */}
+          <div className="flex gap-3 w-full max-w-md mx-auto md:max-w-none">
+            {/* زر الطباعة */}
+            <button 
+            onClick={onPrint} 
+            disabled={documents.length === 0} 
+            className="flex-1 py-3.5 md:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs md:text-sm font-black shadow-lg active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+            >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+            <span>طباعة</span>
+            </button>
+            {/* زر حفظ PDF */}
+            <button 
+            onClick={handleSavePdf} 
+            disabled={documents.length === 0} 
+            className="flex-1 py-3.5 md:py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs md:text-sm font-black shadow-lg active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+            >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            <span>PDF</span>
+            </button>
+
+          </div>
+       </div>
     </div>
   );
 };
