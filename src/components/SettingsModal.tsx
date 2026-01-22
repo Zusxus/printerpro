@@ -1,11 +1,25 @@
 import React from 'react';
+import { useTheme } from './theme-provider'; // 👈 1. استدعاء الهوك
+import { 
+  X, 
+  ChevronRight, // بديل زر الرجوع
+  LayoutTemplate, 
+  StretchHorizontal, 
+  Scissors, 
+  Tag, 
+  Ruler, 
+  Sun, 
+  Moon, 
+  Flame, 
+  Droplets, 
+  Check 
+} from 'lucide-react'; // 👈 استيراد الأيقونات النظيفة
 
 interface SettingsPageProps {
   settings: any;
   onUpdate: (newSettings: any) => void;
   onBack: () => void;
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
+  // ❌ تم حذف currentTheme و onThemeChange لأننا نستخدم الهوك الآن
   onOpenCalibration: () => void;
 }
 
@@ -13,36 +27,67 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
   settings, 
   onUpdate, 
   onBack, 
-  isDarkMode, 
-  onToggleTheme, 
   onOpenCalibration 
 }) => {
+  
+  // 👈 2. استخدام الهوك للحصول على الثيم ودالة التغيير
+  const { theme: currentTheme, setTheme } = useTheme();
+
+  // تعريف قائمة الثيمات (تأكدنا من تطابق الـ id مع theme-provider)
+  const themes = [
+    { 
+      id: 'light', 
+      name: 'الوضع النهاري', 
+      icon: <Sun className="w-6 h-6" />, 
+      desc: 'مشرق وواضح', 
+      previewClass: 'bg-slate-100 border-slate-300' 
+    },
+    { 
+      id: 'dark', 
+      name: 'الوضع الليلي', 
+      icon: <Moon className="w-6 h-6" />, 
+      desc: 'مريح للعين', 
+      previewClass: 'bg-slate-900 border-slate-700' 
+    },
+    { 
+      id: 'theme-fire', // ✅ تم التصحيح ليتطابق مع الـ CSS
+      name: 'الوضع الناري', 
+      icon: <Flame className="w-6 h-6" />, 
+      desc: 'طاقة وحيوية', 
+      previewClass: 'bg-orange-950 border-orange-800' 
+    },
+    { 
+      id: 'theme-glass', // ✅ تم التصحيح
+      name: 'الوضع الزجاجي', 
+      icon: <Droplets className="w-6 h-6" />, 
+      desc: 'شفافية عصرية', 
+      previewClass: 'bg-gradient-to-br from-cyan-500 to-blue-600 border-white/20' 
+    },
+  ];
+
   return (
-    // ✅ التعديل هنا: تم تغيير z-[100] إلى z-[35]
-    // هذا يجعل الإعدادات فوق السايدبار (20) لكن تحت المودالات (50+)
-    <div className="fixed inset-0 z-[35] w-full h-dvh md:static md:w-full md:h-full bg-white dark:bg-slate-900 overflow-y-auto animate-in slide-in-from-left duration-300 transition-colors print:hidden
-    [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full">
+    <div className="fixed inset-0 z-[35] w-full h-dvh md:static md:w-full md:h-full bg-card text-foreground overflow-y-auto animate-in slide-in-from-left duration-300 transition-colors print:hidden
+    [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-muted dark:[&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full">
       
       {/* الهيدر */}
-      <header className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-4 flex items-center justify-between z-10 transition-colors">
+      <header className="sticky top-0 bg-card/80 backdrop-blur-md border-b border-border px-4 py-4 flex items-center justify-between z-10 transition-colors">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}
-            className="w-12 h-12 flex items-center justify-center bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-transparent dark:border-slate-700"
+            className="w-12 h-12 flex items-center justify-center bg-muted/20 text-muted-foreground rounded-2xl hover:bg-primary hover:text-primary-foreground transition-all shadow-sm border border-transparent"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-            </svg>
+            {/* استبدال SVG بـ Lucide Icon */}
+            <ChevronRight className="w-6 h-6 rotate-180 md:rotate-0" /> 
           </button>
           <div>
-            <h1 className="text-sm md:text-xl font-black text-slate-800 dark:text-white tracking-tighter">إعدادات النظام</h1>
-            <p className="text-sm md:text-l text-slate-400">تخصيص تجربة الطباعة والترتيب الآلي</p>
+            <h1 className="text-sm md:text-xl font-black text-foreground tracking-tighter">إعدادات النظام</h1>
+            <p className="text-sm md:text-l text-muted">تخصيص تجربة الطباعة والترتيب الآلي</p>
           </div>
         </div>
         
         <button 
           onClick={onBack}
-          className="px-8 py-3 bg-blue-600 text-white rounded-2xl text-sm md:text-xl font-bold shadow-lg shadow-blue-100 dark:shadow-none hover:bg-blue-700 transition-all"
+          className="px-8 py-3 bg-primary text-primary-foreground rounded-2xl text-sm md:text-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/80 transition-all"
         >
           حفظ والرجوع
         </button>
@@ -53,58 +98,64 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
           
           {/* قسم تنسيق الصفحة */}
           <section className="space-y-6">
-            <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">تنسيق الصفحة</h3>
+            <h3 className="text-sm font-black text-primary uppercase tracking-widest">تنسيق الصفحة</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div 
                 onClick={() => onUpdate({...settings, groupOrientation: 'vertical'})}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all dark:bg-slate-900 ${settings.groupOrientation === 'vertical' ? 'border-blue-500 bg-blue-50/30 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all bg-card ${settings.groupOrientation === 'vertical' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/35 hover:bg-primary/4'}`}
               >
-                <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm mb-4 flex items-center justify-center text-blue-600 border border-slate-100 dark:border-slate-700">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h8M8 12h8m-8 5h8" /></svg>
+                <div className="w-12 h-12 bg-muted/10 rounded-xl shadow-sm mb-4 flex items-center justify-center text-primary border border-border ">
+                   <LayoutTemplate className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">الربط العمودي</h4>
-                <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر فوق بعضهما (الوضع التقليدي).</p>
+                <h4 className="font-bold text-foreground text-sm md:text-xl">الربط العمودي</h4>
+                <p className="text-sm md:text-l text-muted mt-1">يتم وضع الوجه والظهر فوق بعضهما (الوضع التقليدي).</p>
               </div>
 
               <div 
                 onClick={() => onUpdate({...settings, groupOrientation: 'horizontal'})}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all dark:bg-slate-900 ${settings.groupOrientation === 'horizontal' ? 'border-blue-500 bg-blue-50/30 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all bg-card ${settings.groupOrientation === 'horizontal' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/35 hover:bg-primary/4'}`}
               >
-                <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm mb-4 flex items-center justify-center text-blue-600 border border-slate-100 dark:border-slate-700">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m6 10V7" /></svg>
+                <div className="w-12 h-12 bg-muted/10 rounded-xl shadow-sm mb-4 flex items-center justify-center text-primary border border-border">
+                  <StretchHorizontal className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">الربط الأفقي</h4>
-                <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">يتم وضع الوجه والظهر جنباً إلى جنب (مثالي للبطاقات الوطنية).</p>
+                <h4 className="font-bold text-foreground text-sm md:text-xl">الربط الأفقي</h4>
+                <p className="text-sm md:text-l text-muted mt-1">يتم وضع الوجه والظهر جنباً إلى جنب (مثالي للبطاقات الوطنية).</p>
               </div>
             </div>
           </section>
 
           {/* قسم المساعدات البصرية */}
           <section className="space-y-4">
-            <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">المساعدات البصرية</h3>
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-4 border border-slate-100 dark:border-slate-800">
-              <div className="divide-y divide-slate-200/50 dark:divide-slate-800">
+            <h3 className="text-sm font-black text-primary uppercase tracking-widest">المساعدات البصرية</h3>
+            <div className="bg-card rounded-[2.5rem] p-4 border border-border shadow-sm hover:border-primary/50 hover:bg-primary/5">
+              <div className="divide-y divide-border">
                 <div className="py-5 px-4 flex items-center justify-between">
-                  <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text=xl">علامات القص (Cut Marks)</span>
-                    <span className="text-sm md:text-l text-slate-400">إضافة خطوط رفيعة حول كل خانة لتسهيل عملية التقطيع بالمقص.</span>
+                  <div className="flex items-center gap-3">
+                    <Scissors className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                        <span className="block font-bold text-foreground text-sm md:text=xl ">علامات القص (Cut Marks)</span>
+                        <span className="text-sm md:text-l text-muted">إضافة خطوط رفيعة حول كل خانة لتسهيل عملية التقطيع.</span>
+                    </div>
                   </div>
                   <div 
                     onClick={() => onUpdate({...settings, showCutMarks: !settings.showCutMarks})}
-                    className={`w-14 h-8 rounded-full relative transition-all cursor-pointer ${settings.showCutMarks ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                    className={`w-14 h-8 rounded-full relative transition-all cursor-pointer ${settings.showCutMarks ? 'bg-primary' : 'bg-muted'}`}
                   >
                     <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${settings.showCutMarks ? 'left-1' : 'left-7'}`} />
                   </div>
                 </div>
 
                 <div className="py-5 px-4 flex items-center justify-between">
-                  <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text-xl">تسمية الخانات الفارغة</span>
-                    <span className="text-sm text-slate-400">إظهار نوع المستمسك واسم السلوت (وجه/ظهر) إذا لم يتم رفع صورة.</span>
+                  <div className="flex items-center gap-3">
+                    <Tag className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                        <span className="block font-bold text-foreground text-sm md:text-xl">تسمية الخانات الفارغة</span>
+                        <span className="text-sm text-muted">إظهار نوع المستمسك واسم السلوت (وجه/ظهر) إذا لم يتم رفع صورة.</span>
+                    </div>
                   </div>
                   <div 
                     onClick={() => onUpdate({...settings, showLabels: !settings.showLabels})}
-                    className={`w-14 h-8 rounded-full relative transition-all cursor-pointer ${settings.showLabels ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                    className={`w-14 h-8 rounded-full relative transition-all cursor-pointer ${settings.showLabels ? 'bg-primary' : 'bg-muted'}`}
                   >
                     <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${settings.showLabels ? 'left-1' : 'left-7'}`} />
                   </div>
@@ -115,55 +166,66 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
 
            {/* قسم دقة الطباعة والمعايرة */}
            <section className="space-y-4">
-            <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">دقة الطباعة</h3>
+            <h3 className="text-sm font-black text-primary uppercase tracking-widest">دقة الطباعة</h3>
             <div 
               onClick={onOpenCalibration}
-              className="group bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-6 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-all"
+              className="group bg-card rounded-[2.5rem] p-6 border border-border cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all shadow-sm"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm flex items-center justify-center text-blue-600 transition-transform">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                  <div className="w-12 h-12 bg-muted/10 border border-border rounded-2xl shadow-sm flex items-center justify-center text-primary transition-transform">
+                    <Ruler className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-800 dark:text-white text-sm md:text-xl">معايرة المسطرة</h4>
-                    <p className="text-sm md:text-l text-slate-500 dark:text-slate-400 mt-1">اضبط هذا الخيار إذا كانت القياسات المطبوعة أكبر أو أصغر من الواقع.</p>
+                    <h4 className="font-bold text-foreground text-sm md:text-xl">معايرة المسطرة</h4>
+                    <p className="text-sm md:text-l text-muted mt-1">اضبط هذا الخيار إذا كانت القياسات المطبوعة أكبر أو أصغر من الواقع.</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-   flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all">
-                   <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                <div className="w-10 h-10 rounded-full bg-muted/20 flex items-center justify-center text-muted group-hover:text-primary transition-all">
+                   <ChevronRight className="w-5 h-5 rotate-180" />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* قسم المظهر والسمات */}
+          {/* 👇 قسم المظهر والسمات (يعمل الآن مع theme-provider) */}
           <section className="space-y-4">
-            <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">المظهر والسمات</h3>
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-4 border border-slate-100 dark:border-slate-800">
-              <div className="divide-y divide-slate-200/50 dark:divide-slate-800">
-                <div className="py-5 px-4 flex items-center justify-between">
-                  <div>
-                    <span className="block font-bold text-slate-700 dark:text-slate-200 text-sm md:text-xl">الوضع الليلي (Dark Mode)</span>
-                    <span className="text-sm md:text-l text-slate-400">تحويل واجهة النظام إلى اللون الداكن لراحة العين.</span>
+            <h3 className="text-sm font-black text-primary uppercase tracking-widest">المظهر والسمات</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {themes.map((t) => (
+                <button 
+                  key={t.id}
+                  onClick={() => setTheme(t.id as any)} // 👈 استدعاء الدالة هنا
+                  className={`
+                    relative p-4 rounded-3xl border-2 cursor-pointer transition-all duration-300 overflow-hidden text-right
+                    ${currentTheme === t.id 
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/20 scale-[1.02]' 
+                      : 'border-border bg-card hover:border-primary/50 hover:bg-primary/5'
+                    }
+                  `}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-2xl text-foreground">{t.icon}</span>
+                    <div className={`w-6 h-6 rounded-full border shadow-sm ${t.previewClass}`}></div>
                   </div>
                   
-                  <div 
-                    onClick={onToggleTheme}
-                    className={`w-14 h-8 rounded-full relative transition-all cursor-pointer ${isDarkMode ? 'bg-slate-700' : 'bg-slate-300 dark:bg-slate-700'}`}
-                  >
-                    <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all shadow-sm flex items-center justify-center ${isDarkMode ? 'left-1' : 'left-7'}`}>
-                       <span className="text-[10px] select-none">{isDarkMode ? '🌙' : '☀️'}</span>
+                  <h4 className={`font-bold text-lg ${currentTheme === t.id ? 'text-primary' : 'text-foreground'}`}>
+                    {t.name}
+                  </h4>
+                  <p className="text-xs text-muted mt-1 font-medium">{t.desc}</p>
+                  
+                  {currentTheme === t.id && (
+                    <div className="absolute top-4 left-4 text-primary animate-in zoom-in">
+                      <Check className="w-6 h-6" />
                     </div>
-                  </div>
-                </div>
-
-              </div>
+                  )}
+                </button>
+              ))}
             </div>
           </section>
 
-          <footer className="mt-8 p-8 bg-blue-50 dark:bg-slate-900 rounded-[2rem] text-center border border-blue-100 dark:border-slate-800">
-            <p className="text-[11px] text-blue-400 dark:text-blue-500/70 font-medium">Precision Print v2.0 • جميع القياسات تعتمد على معايير الطباعة العالمية ISO/IEC 7810</p>
+          <footer className="mt-8 p-8 bg-card rounded-[2rem] text-center border border-border shadow-sm">
+            <p className="text-[11px] text-muted font-medium">Precision Print v2.0 • جميع القياسات تعتمد على معايير الطباعة العالمية ISO/IEC 7810</p>
           </footer>
 
         </div>
